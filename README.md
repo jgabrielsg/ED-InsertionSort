@@ -1,5 +1,5 @@
-# ED-InsertionSort
-Trabalho em dupla para desenvolvimento do método Insertion Sort em C++ para a disciplina de Estrutura de Dados
+# ED-SelectionSort
+Trabalho em dupla para desenvolvimento do método Selection Sort em C++ para a disciplina de Estrutura de Dados
 
 ---
 

@@ -22,54 +22,83 @@ void swapPayload(Node*, Node*);
 void bubbleSort(Node*);
 void optimizedBubbleSort(Node*);
 
+void selectionSort(Node*);
+void optimizedSelectionSort(Node*);
+
 int main()
 {
     srand(time(0)); // Inicializa a semente do gerador de números aleatórios
 
     Node* head = nullptr;
     Node* head2 = nullptr;
+    Node* head3 = nullptr;
+    Node* head4 = nullptr;
     
     for(int i = 0; i < 100; i++)
     {
         int payload = rand() % 100; // Gera um número aleatório entre 0 e 99
         insertEnd(&head, payload);
         insertEnd(&head2, payload);
+        insertEnd(&head3, payload);
+        insertEnd(&head4, payload);
     }
     
-    cout << "====================================" << endl;
-    cout << "UTILIZANDO bubbleSort" << endl;
-    cout << "====================================" << endl;
+    cout << "Lista Original:" << endl;
     displayList(head);
     
+    cout << "============================================================" << endl;
+    
+    cout << "\n### BubbleSort ###\n";
     
     // Cálculo de tempo de duração da função:
     auto timeStart = high_resolution_clock::now();
     bubbleSort(head);
     auto timeEnd = high_resolution_clock::now();
-    cout << "====================================" << endl;
+    
     displayList(head);
-    cout << "====================================" << endl;
     
     auto timeDuration = duration_cast<nanoseconds>(timeEnd - timeStart);
     cout << "Tempo utilizado: " << timeDuration.count() << " nanosegundos" << endl;
+    cout << "------------------------------" << endl;
     
-    cout << "====================================" << endl;
-    cout << "UTILIZANDO optimizedBubbleSort" << endl;
-    cout << "====================================" << endl;
-    
-    displayList(head2);
-    cout << "====================================" << endl;
+    cout << "\n### BubbleSort Otimizado ###\n";
     
     // Cálculo de tempo de duração da função:
     auto timeStart2 = high_resolution_clock::now();
     optimizedBubbleSort(head2);
     auto timeEnd2 = high_resolution_clock::now();
-    cout << "====================================" << endl;
+    
     displayList(head2);
-    cout << "====================================" << endl;
     
     auto timeDuration2 = duration_cast<nanoseconds>(timeEnd2 - timeStart2);
     cout << "Tempo utilizado: " << timeDuration2.count() << " nanosegundos" << endl;
+    
+    cout << "============================================================" << endl;
+    
+    cout << "\n### SelectionSort ###\n";
+    
+    // Cálculo de tempo de duração da função:
+    auto timeStart3 = high_resolution_clock::now();
+    selectionSort(head3);
+    auto timeEnd3 = high_resolution_clock::now();
+    
+    displayList(head3);
+    
+    auto timeDuration3 = duration_cast<nanoseconds>(timeEnd3 - timeStart3);
+    cout << "Tempo utilizado: " << timeDuration3.count() << " nanosegundos" << endl;
+    cout << "------------------------------" << endl;
+    
+    cout << "\n### SelectionSort Otimizado ###\n";
+    
+    // Cálculo de tempo de duração da função:
+    auto timeStart4 = high_resolution_clock::now();
+    optimizedSelectionSort(head4);
+    auto timeEnd4 = high_resolution_clock::now();
+    
+    displayList(head4);
+    
+    auto timeDuration4 = duration_cast<nanoseconds>(timeEnd4 - timeStart4);
+    cout << "Tempo utilizado: " << timeDuration4.count() << " nanosegundos" << endl;
     
     return 0;
 }
@@ -110,8 +139,6 @@ void bubbleSort(Node* node)
         }
         outerLoop = outerLoop->ptrNext;
     }
-    
-    cout << "Finalizado" << endl;
 }
 
 
@@ -144,8 +171,6 @@ void optimizedBubbleSort(Node* node)
             current = current->ptrNext;
         }
     } while(notOrdered);
-    
-    cout << "Finalizado" << endl;
 }
 
 Node* createNode(int iPayload)
@@ -206,4 +231,79 @@ void insertEnd(Node** head, int iPayload)
   
   newNode->ptrPrev = temp; //newNode aponta para o fim da lista
   temp->ptrNext = newNode; //Antigo último elemento aponta para o novo nó
+}
+
+void selectionSort(Node* head)
+{
+    if (head == nullptr)
+    {
+        cout << "Lista vazia: Não é possível realizar SelectionSort" << endl;
+        return;
+    }
+    
+    if (head->ptrPrev != nullptr)
+    {
+        cout << "Meio ou Fim da Lista: Não é possível realizar SelectionSort" << endl;
+        return;
+    }
+    
+    Node* ptrOuter = head;
+    Node* ptrInner = nullptr;
+
+    while(ptrOuter != nullptr && ptrOuter->ptrNext != nullptr)
+    {
+        ptrInner = ptrOuter->ptrNext;
+        
+        while (ptrInner != nullptr)
+        {
+            if (ptrInner->iPayload < ptrOuter->iPayload)
+            {
+                swapPayload(ptrInner, ptrOuter);
+            }
+            ptrInner = ptrInner->ptrNext;
+        }
+        
+        ptrOuter = ptrOuter->ptrNext;
+    }
+}
+
+void optimizedSelectionSort(Node* head)
+{
+    if (head == nullptr)
+    {
+        cout << "Lista vazia: Não é possível realizar SelectionSort" << endl;
+        return;
+    }
+    
+    if (head->ptrPrev != nullptr)
+    {
+        cout << "Meio ou Fim da Lista: Não é possível realizar SelectionSort" << endl;
+        return;
+    }
+    
+    Node* ptrOuter = head;
+    Node* ptrInner = nullptr;
+
+    while(ptrOuter != nullptr && ptrOuter->ptrNext != nullptr)
+    {
+        ptrInner = ptrOuter->ptrNext;
+        
+        Node* ptrMinPayload = ptrOuter;
+        
+        while (ptrInner != nullptr)
+        {
+            if (ptrInner->iPayload < ptrMinPayload->iPayload)
+            {
+                ptrMinPayload = ptrInner;
+            }
+            ptrInner = ptrInner->ptrNext;
+        }
+        
+        if (ptrMinPayload != ptrOuter)
+        {
+            swapPayload(ptrMinPayload, ptrOuter);
+        }
+        
+        ptrOuter = ptrOuter->ptrNext;
+    }
 }

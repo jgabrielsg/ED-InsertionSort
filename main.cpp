@@ -15,6 +15,8 @@ typedef struct Node
 Node* createNode(int);
 void insertEnd(Node**, int);
 void displayList(Node*);
+void swapValues(Node*, Node*);
+
 
 int main()
 {
@@ -30,10 +32,8 @@ int main()
     displayList(head);
     cout << "==============" << endl;
     
-    
     return 0;
 }
-
 
 Node* createNode(int iPayload)
 {
@@ -51,7 +51,7 @@ void displayList(Node* node)
     if (node == nullptr)
     {
         cout << "Lista vazia: Não é possível realizar displayList" << endl;
-        return; //Usa return pra sair da função, o resto do código não será executado
+        return;
     }
     
     if  (node -> ptrPrev != nullptr)
@@ -76,22 +76,25 @@ void displayList(Node* node)
 
 void insertEnd(Node** head, int iPayload)
 {
-  Node* newNode = createNode(iPayload);
-  //newNode -> ptrNext = nullptr;
-  
-  if (*head == nullptr)
-  {
-      //newNode -> ptrNext = nullptr; Essa linha não é obrigatória pois já definimos anteriormente
-      (*head) = newNode;
-      return;
-      
-  }
-  
-  Node* temp = (*head);
-  
-  //Percorremos a lista até seu fim(ptrNext do ultimo nó é NULL)
-  while(temp->ptrNext != nullptr) temp = temp->ptrNext;
-  
-  newNode->ptrPrev = temp; //newNode aponta para o fim da lista
-  temp->ptrNext = newNode; //Antigo último elemento aponta para o novo nó
+    Node* newNode = createNode(iPayload);
+    
+    if (*head == nullptr)
+    {
+        (*head) = newNode;
+        return;
+    }
+    
+    Node* temp = (*head);
+    
+    while(temp->ptrNext != nullptr) temp = temp->ptrNext;
+    
+    newNode->ptrPrev = temp;
+    temp->ptrNext = newNode; 
+}
+
+void swapValues(Node* node1, Node* node2) 
+{
+    int temp = node1->iPayload;
+    node1->iPayload = node2->iPayload;
+    node2->iPayload = temp;
 }
